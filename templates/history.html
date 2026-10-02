@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction History | CarPredict AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <main class="page-content">
+
+        <div class="container history-container">
+
+            <h1>📋 Prediction History</h1>
+
+            <p class="subtitle">
+                Previous car price predictions
+            </p>
+
+
+            <!-- FILTERS -->
+
+            <div class="history-controls">
+
+                <input
+                    type="text"
+                    id="historySearch"
+                    placeholder="🔎 Search predictions..."
+                    onkeyup="filterHistory()">
+
+
+                <select
+                    id="fuelFilter"
+                    onchange="filterHistory()">
+
+                    <option value="">
+                        ⛽ All Fuel Types
+                    </option>
+
+                    <option value="Petrol">
+                        Petrol
+                    </option>
+
+                    <option value="Diesel">
+                        Diesel
+                    </option>
+
+                    <option value="CNG">
+                        CNG
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="transmissionFilter"
+                    onchange="filterHistory()">
+
+                    <option value="">
+                        ⚙️ All Transmissions
+                    </option>
+
+                    <option value="Manual">
+                        Manual
+                    </option>
+
+                    <option value="Automatic">
+                        Automatic
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            {% if not history.empty %}
+
+            <div class="table-wrapper">
+
+                <table id="historyTable">
+
+                    <thead>
+
+                        <tr>
+
+                            {% for column in history.columns %}
+
+                            <th>
+                                {{ column }}
+                            </th>
+
+                            {% endfor %}
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for row in history.values %}
+
+                        <tr>
+
+                            {% for value in row %}
+
+                            <td>
+                                {{ value }}
+                            </td>
+
+                            {% endfor %}
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <h2>
+                    No Predictions Yet
+                </h2>
+
+                <p>
+                    Make your first car price prediction
+                    to see it here.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+            <a href="/" class="back-button">
+                🔮 Make New Prediction
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        function filterHistory() {
+
+            const searchInput =
+                document
+                    .getElementById("historySearch")
+                    .value
+                    .toLowerCase();
+
+            const fuelFilter =
+                document
+                    .getElementById("fuelFilter")
+                    .value
+                    .toLowerCase();
+
+            const transmissionFilter =
+                document
+                    .getElementById("transmissionFilter")
+                    .value
+                    .toLowerCase();
+
+
+            const table =
+                document.getElementById("historyTable");
+
+
+            if (!table) {
+                return;
+            }
+
+
+            const rows =
+                table
+                    .getElementsByTagName("tbody")[0]
+                    .getElementsByTagName("tr");
+
+
+            for (let row of rows) {
+
+                const cells =
+                    row.getElementsByTagName("td");
+
+
+                const rowText =
+                    row.innerText.toLowerCase();
+
+
+                const matchesSearch =
+                    rowText.includes(searchInput);
+
+
+                // Fuel Type column
+                const fuelValue =
+                    cells.length > 3
+                        ? cells[3].innerText.toLowerCase()
+                        : "";
+
+
+                // Transmission column
+                const transmissionValue =
+                    cells.length > 5
+                        ? cells[5].innerText.toLowerCase()
+                        : "";
+
+
+                const matchesFuel =
+                    fuelFilter === "" ||
+                    fuelValue === fuelFilter;
+
+
+                const matchesTransmission =
+                    transmissionFilter === "" ||
+                    transmissionValue === transmissionFilter;
+
+
+                row.style.display =
+                    matchesSearch &&
+                    matchesFuel &&
+                    matchesTransmission
+                        ? ""
+                        : "none";
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

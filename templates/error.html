@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Input Error | CarPredict AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <main class="page-content">
+
+        <div class="container error-container">
+
+            <div class="error-icon">
+                ⚠️
+            </div>
+
+            <h1>
+                Invalid Input
+            </h1>
+
+            <p class="subtitle">
+                Something needs to be corrected
+            </p>
+
+
+            <div class="error-card">
+
+                <h2>
+                    Something went wrong
+                </h2>
+
+                <p>
+                    {{ message }}
+                </p>
+
+            </div>
+
+
+            <a href="/" class="back-button">
+                🔄 Try Again
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

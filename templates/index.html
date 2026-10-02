@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CarPredict AI | Car Price Prediction</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <main class="main-content">
+
+        <div class="prediction-card">
+
+            <h1>🚗 Car Price Prediction</h1>
+
+            <p class="subtitle">
+                Enter car details to predict its estimated selling price
+            </p>
+
+            <form action="/predict" method="POST" id="predict-form">
+
+                <div class="form-group">
+                    <label for="year">Car Year</label>
+
+                    <input
+                        type="number"
+                        id="year"
+                        name="year"
+                        min="2000"
+                        max="2026"
+                        placeholder="Example: 2018"
+                        required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="present_price">
+                        Present Price (Lakhs)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="present_price"
+                        name="present_price"
+                        step="any"
+                        min="0"
+                        placeholder="Example: 5.59"
+                        required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="driven_kms">
+                        Driven Kilometers
+                    </label>
+
+                    <input
+                        type="number"
+                        id="driven_kms"
+                        name="driven_kms"
+                        min="0"
+                        placeholder="Example: 27000"
+                        required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="fuel_type">Fuel Type</label>
+
+                    <select id="fuel_type"
+                            name="fuel_type"
+                            required>
+
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="CNG">CNG</option>
+
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="selling_type">Selling Type</label>
+
+                    <select id="selling_type"
+                            name="selling_type"
+                            required>
+
+                        <option value="Dealer">Dealer</option>
+                        <option value="Individual">Individual</option>
+
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="transmission">Transmission</label>
+
+                    <select id="transmission"
+                            name="transmission"
+                            required>
+
+                        <option value="Manual">Manual</option>
+                        <option value="Automatic">Automatic</option>
+
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="owner">Previous Owners</label>
+
+                    <input
+                        type="number"
+                        id="owner"
+                        name="owner"
+                        min="0"
+                        max="3"
+                        placeholder="0"
+                        required>
+                </div>
+
+
+                <button type="submit">
+                    🔮 Predict Car Price
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+    <footer class="main-footer">
+
+        <p>
+            🚗 CarPredict AI | Machine Learning Car Price Prediction
+        </p>
+
+        <p>
+            Built with Python • Scikit-learn • Flask
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

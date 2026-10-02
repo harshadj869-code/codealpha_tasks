@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction Result | CarPredict AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <main class="page-content">
+
+        <div class="container">
+
+            <!-- PAGE HEADER -->
+
+            <div class="result-header">
+
+                <h1>🚗 Car Price Prediction Result</h1>
+
+                <p class="subtitle">
+                    AI-powered estimated resale price analysis
+                </p>
+
+            </div>
+
+
+            <!-- MAIN RESULT -->
+
+            <div class="result-card">
+
+                <div class="result-icon">
+                    💰
+                </div>
+
+                <p class="result-label">
+                    Estimated Selling Price
+                </p>
+
+                <div class="prediction-price">
+                    ₹ {{ "%.2f"|format(prediction) }} Lakhs
+                </div>
+
+                <p class="result-description">
+                    Based on the car details and the trained
+                    Random Forest machine learning model.
+                </p>
+
+            </div>
+
+
+            <!-- PRICE ANALYSIS -->
+
+            <section class="dashboard-section">
+
+                <h2>📊 Price Analysis</h2>
+
+                <div class="dashboard-grid">
+
+                    <!-- Present Price -->
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon">
+                            💵
+                        </div>
+
+                        <h3>Present Price</h3>
+
+                        <div class="kpi-value">
+                            ₹ {{ "%.2f"|format(present_price) }} Lakhs
+                        </div>
+
+                        <p>
+                            Current/reference price
+                        </p>
+
+                    </div>
+
+
+                    <!-- Estimated Price -->
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon">
+                            🎯
+                        </div>
+
+                        <h3>Predicted Price</h3>
+
+                        <div class="kpi-value">
+                            ₹ {{ "%.2f"|format(prediction) }} Lakhs
+                        </div>
+
+                        <p>
+                            AI estimated resale price
+                        </p>
+
+                    </div>
+
+
+                    <!-- Depreciation -->
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon">
+                            📉
+                        </div>
+
+                        <h3>Price Difference</h3>
+
+                        <div class="kpi-value">
+                            ₹ {{ "%.2f"|format(depreciation) }} Lakhs
+                        </div>
+
+                        <p>
+                            Present price − predicted price
+                        </p>
+
+                    </div>
+
+
+                    <!-- Depreciation Percentage -->
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon">
+                            📊
+                        </div>
+
+                        <h3>Price Change</h3>
+
+                        <div class="kpi-value">
+                            {{ "%.2f"|format(depreciation_percentage) }}%
+                        </div>
+
+                        <p>
+                            Calculated price difference
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PRICE CATEGORY -->
+
+            <section class="dashboard-section">
+
+                <h2>📌 Prediction Analysis</h2>
+
+                <div class="model-card">
+
+                    <h3>
+                        Price Category
+                    </h3>
+
+                    <div class="metric">
+
+                        <span>Estimated Category</span>
+
+                        <strong>
+                            {{ price_category }}
+                        </strong>
+
+                    </div>
+
+                    <p>
+                        This category is calculated from the
+                        relationship between the present price
+                        and predicted price.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- CAR DETAILS -->
+
+            <section class="dashboard-section">
+
+                <h2>🚘 Car Details</h2>
+
+                <div class="model-grid">
+
+
+                    <div class="model-card">
+
+                        <div class="metric">
+
+                            <span>Year</span>
+
+                            <strong>
+                                {{ year }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>Driven Kilometers</span>
+
+                            <strong>
+                                {{ "{:,}".format(driven_kms) }} km
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>Fuel Type</span>
+
+                            <strong>
+                                {{ fuel_type }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>Selling Type</span>
+
+                            <strong>
+                                {{ selling_type }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="model-card">
+
+                        <div class="metric">
+
+                            <span>Transmission</span>
+
+                            <strong>
+                                {{ transmission }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>Previous Owners</span>
+
+                            <strong>
+                                {{ owner }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>ML Model</span>
+
+                            <strong>
+                                Random Forest
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>Prediction Type</span>
+
+                            <strong>
+                                Machine Learning
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACTION BUTTONS -->
+
+            <div class="dashboard-actions">
+
+                <a href="/"
+                   class="back-button">
+                    🔮 Predict Another Car
+                </a>
+
+
+                <a href="/dashboard"
+                   class="back-button secondary-button">
+                    📊 View Dashboard
+                </a>
+
+
+                <a href="/history"
+                   class="back-button secondary-button">
+                    📋 View History
+                </a>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <footer class="footer">
+
+                <p>
+                    🚗 CarPredict AI | Professional ML Application
+                </p>
+
+                <p>
+                    Built with Python • Pandas • Scikit-learn • Flask
+                </p>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

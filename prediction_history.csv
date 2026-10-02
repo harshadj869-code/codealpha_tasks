@@ -1,0 +1,10 @@
+Year,Present_Price,Driven_kms,Fuel_Type,Selling_type,Transmission,Owner,Predicted_Price
+2018,5.59,2500,Petrol,Individual,Manual,1,5.14
+2015,5.23,2500,Petrol,Dealer,Manual,1,4.51
+2026,10.23,2000,Petrol,Dealer,Manual,1,7.57
+2023,5.96,5000,Petrol,Dealer,Manual,1,5.18
+2023,5.59,2500,Petrol,Individual,Automatic,2,5.12
+2025,5.93,25000,Petrol,Dealer,Manual,1,5.24
+2020,8.63,2500,Petrol,Dealer,Manual,1,7.3
+2017,10.25,2500,Petrol,Dealer,Manual,1,7.75
+2026,20.23,50,Petrol,Dealer,Manual,1,16.44

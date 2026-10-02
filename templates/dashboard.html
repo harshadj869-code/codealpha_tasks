@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | CarPredict AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <main class="page-content">
+
+        <div class="container dashboard-container">
+
+            <!-- PAGE HEADER -->
+
+            <h1>📊 Car Price Prediction Dashboard</h1>
+
+            <p class="subtitle">
+                Machine Learning model performance and prediction analytics
+            </p>
+
+
+            <!-- KPI CARDS -->
+
+            <div class="dashboard-grid">
+
+                <div class="dashboard-card">
+
+                    <div class="card-icon">
+                        🔮
+                    </div>
+
+                    <h3>Total Predictions</h3>
+
+                    <div class="kpi-value">
+                        {{ total_predictions }}
+                    </div>
+
+                    <p>
+                        Predictions generated
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-icon">
+                        💰
+                    </div>
+
+                    <h3>Average Price</h3>
+
+                    <div class="kpi-value">
+                        ₹ {{ "%.2f"|format(average_price) }}
+                    </div>
+
+                    <p>
+                        Average predicted price
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-icon">
+                        📈
+                    </div>
+
+                    <h3>Highest Prediction</h3>
+
+                    <div class="kpi-value">
+                        ₹ {{ "%.2f"|format(highest_price) }}
+                    </div>
+
+                    <p>
+                        Maximum predicted price
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-icon">
+                        📉
+                    </div>
+
+                    <h3>Lowest Prediction</h3>
+
+                    <div class="kpi-value">
+                        ₹ {{ "%.2f"|format(lowest_price) }}
+                    </div>
+
+                    <p>
+                        Minimum predicted price
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREDICTION ANALYTICS -->
+
+            <section class="dashboard-section">
+
+                <h2>📈 Prediction Analytics</h2>
+
+                <div class="chart-card">
+
+                    <canvas id="predictionChart"></canvas>
+
+                </div>
+
+            </section>
+
+
+            <!-- FEATURE IMPORTANCE -->
+
+            <section class="dashboard-section">
+
+                <h2>🔍 Feature Importance</h2>
+
+                <p class="section-subtitle">
+                    Features influencing the Random Forest model
+                </p>
+
+                <div class="chart-card">
+
+                    <canvas id="featureImportanceChart"></canvas>
+
+                </div>
+
+            </section>
+
+
+            <!-- MODEL PERFORMANCE -->
+
+            <section class="dashboard-section">
+
+                <h2>🤖 Model Performance</h2>
+
+                <div class="model-grid">
+
+
+                    <!-- LINEAR REGRESSION -->
+
+                    <div class="model-card">
+
+                        <h3>
+                            📊 Linear Regression
+                        </h3>
+
+
+                        <div class="metric">
+
+                            <span>MAE</span>
+
+                            <strong>
+                                {{ "%.4f"|format(
+                                    metrics["Linear Regression"]["MAE"]
+                                ) }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>RMSE</span>
+
+                            <strong>
+                                {{ "%.4f"|format(
+                                    metrics["Linear Regression"]["RMSE"]
+                                ) }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>R² Score</span>
+
+                            <strong>
+                                {{ "%.4f"|format(
+                                    metrics["Linear Regression"]["R2"]
+                                ) }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RANDOM FOREST -->
+
+                    <div class="model-card">
+
+                        <h3>
+                            🌲 Random Forest
+                        </h3>
+
+
+                        <div class="metric">
+
+                            <span>MAE</span>
+
+                            <strong>
+                                {{ "%.4f"|format(
+                                    metrics["Random Forest"]["MAE"]
+                                ) }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>RMSE</span>
+
+                            <strong>
+                                {{ "%.4f"|format(
+                                    metrics["Random Forest"]["RMSE"]
+                                ) }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="metric">
+
+                            <span>R² Score</span>
+
+                            <strong>
+                                {{ "%.4f"|format(
+                                    metrics["Random Forest"]["R2"]
+                                ) }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- NAVIGATION BUTTONS -->
+
+            <div class="dashboard-actions">
+
+                <a href="/" class="back-button">
+                    🔮 New Prediction
+                </a>
+
+                <a href="/history"
+                   class="back-button secondary-button">
+                    📋 View History
+                </a>
+
+                <a href="/about"
+                   class="back-button secondary-button">
+                    ℹ️ About Project
+                </a>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <footer class="footer">
+
+                <p>
+                    🚗 CarPredict AI | Professional ML Dashboard
+                </p>
+
+                <p>
+                    Built with Python • Pandas • Scikit-learn • Flask
+                </p>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- CHARTS -->
+
+    <script>
+
+        // ================================
+        // Prediction Analytics Chart
+        // ================================
+
+        const predictionLabels =
+            {{ prediction_labels | tojson }};
+
+        const predictionValues =
+            {{ prediction_values | tojson }};
+
+
+        const predictionChartElement =
+            document.getElementById("predictionChart");
+
+
+        if (predictionChartElement) {
+
+            new Chart(
+                predictionChartElement,
+                {
+
+                    type: "line",
+
+                    data: {
+
+                        labels: predictionLabels,
+
+                        datasets: [
+
+                            {
+
+                                label: "Predicted Price (Lakhs)",
+
+                                data: predictionValues,
+
+                                borderWidth: 3,
+
+                                tension: 0.3,
+
+                                fill: false,
+
+                                pointRadius: 5
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                display: true
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                title: {
+
+                                    display: true,
+
+                                    text: "Prediction Number"
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                title: {
+
+                                    display: true,
+
+                                    text: "Price (Lakhs)"
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+
+
+        // ================================
+        // Feature Importance Chart
+        // ================================
+
+        const featureLabels = [
+
+            {% for item in feature_importance %}
+
+                "{{ item.Feature }}"
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const featureValues = [
+
+            {% for item in feature_importance %}
+
+                {{ item.Importance }}
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const featureChartElement =
+            document.getElementById("featureImportanceChart");
+
+
+        if (featureChartElement) {
+
+            new Chart(
+                featureChartElement,
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: featureLabels,
+
+                        datasets: [
+
+                            {
+
+                                label: "Feature Importance",
+
+                                data: featureValues,
+
+                                borderWidth: 1
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        indexAxis: "y",
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                display: false
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                title: {
+
+                                    display: true,
+
+                                    text: "Importance"
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                title: {
+
+                                    display: true,
+
+                                    text: "Features"
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
